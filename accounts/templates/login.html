@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}Sign in{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="wrapper fadeInDown">
+        <div id="formContent" class="pt-3">
+
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-4">
+                        {{ field.label_tag }}
+                        {{ field }}
+
+                        {% for error in field.errors %}
+                            <p style="color:red">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} text-center"
+                             role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <button type="submit">{% trans "Sign In" %}</button>
+            </form>
+
+            <div id="formFooter">
+                {% get_current_language as LANGUAGE_CODE %}
+                <a class="underlineHover" href="{% url 'register' %}">{% trans "Don`t have an account? Sign Up" %}</a>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

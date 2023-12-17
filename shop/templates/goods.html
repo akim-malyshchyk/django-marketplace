@@ -1,0 +1,37 @@
+{% extends 'table.html' %}
+{% block title %}Best shop{% endblock %}
+{% load i18n %}
+
+{% block form_title %}{{ category.name }}{% endblock %}
+
+{% block table_header %}
+    <th scope="col" class="text-left">Name</th>
+    <th scope="col" class="text-left">Price</th>
+    <th scope="col" class="text-right">Quantity</th>
+    <th scope="col" class="text-right">Add to cart</th>
+{% endblock %}
+
+{% block table_body %}
+    {% for product in goods %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <form method="post" action={% url 'add_to_cart' product.id %}>
+                {% csrf_token %}
+                <td class="text-right">
+                    <input type="number" class="form-control" name="quantity" value="1"
+                           aria-label="quantity" style="width: 15%"/>
+                </td>
+                <td class="text-right">
+                    <button type="submit" class="btn btn-outline-primary me-2">Add
+                    </button>
+
+                </td>
+            </form>
+        </tr>
+    {% empty %}
+        <tr>
+            <td>No goods in this category :(</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

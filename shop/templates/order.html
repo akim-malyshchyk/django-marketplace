@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+
+    <div class="container">
+        <!-- Flash messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} text-center"
+                     role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row mb-1 justify-content-center">
+            <div class="col-sm">
+                <div class="card p-3 shadow rounded-3">
+                    <div class="card-body pb-0">
+                        {% if cart %}
+                            <h5 class="page-title text-muted mb-2">Your order</h5>
+                            <div class="row mb-1">
+                                <div class="col-2"></div>
+                                <div class="col-8">
+
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="text-left">Name</th>
+                                            <th scope="col" class="text-left">Price</th>
+                                            <th scope="col" class="text-left"></th>
+                                            <th scope="col" class="text-right">Quantity</th>
+                                            <th scope="col" class="text-right"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for goods in cart %}
+                                            <tr>
+                                                <td>{{ goods.product.name }}</td>
+                                                <td>{{ goods.product.price }}</td>
+                                                <td>
+                                                    <form method="post"
+                                                          action={% url 'remove_product' product_id=goods.product.id %}>
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-outline-primary me-2"
+                                                                style="margin-right: 5px">Remove
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                <form method="post"
+                                                      action={% url 'set_product_quantity' product_id=goods.product.id %}>
+                                                    {% csrf_token %}
+                                                    <td class="text-right">
+                                                        <input type="number" class="form-control" name="quantity"
+                                                               value="{{ goods.quantity }}" aria-label="quantity"
+                                                               style="width: 15%"/>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <button type="submit" class="btn btn-outline-primary me-2">Save
+                                                        </button>
+
+                                                    </td>
+                                                </form>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    Order price: {{ price }}$
+                                </div> <!-- end col -->
+                                <div class="col-2"></div>
+                            </div> <!-- end row -->
+
+                            <hr class="my-3"> <!-- dividing line -->
+                            <form method="post" action="{% url 'confirm_order' %}">
+                                {% csrf_token %}
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        {{ form.first_name.label_tag }}
+                                        {{ form.first_name }}
+                                        {% for error in form.first_name.errors %}
+                                            <p class="text-danger m-0">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {{ form.last_name.label_tag }}
+                                        {{ form.last_name }}
+                                        {% for error in form.last_name.errors %}
+                                            <p class="text-danger m-0">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        {{ form.phone_number.label_tag }}
+                                        {{ form.phone_number }}
+                                        {% for error in form.phone_number.errors %}
+                                            <p class="text-danger m-0">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-sm-6">
+                                        {{ form.delivery_address.label_tag }}
+                                        {{ form.delivery_address }}
+                                        {% for error in form.delivery_address.errors %}
+                                            <p class="text-danger m-0">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">{{ form.delivery_time.label }}</span>
+                                            {% if perms.topics.schedule_topic %}
+                                                {{ form.delivery_time }}
+                                                {% for error in form.delivery_time.errors %}
+                                                    <p class="text-danger m-0">{{ error }}</p>
+                                                {% endfor %}
+                                            {% else %}
+                                                <input type="text" name="{{ form.delivery_time.html_name }}"
+                                                       class="form-control" id="{{ form.delivery_time.id_for_label }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-12">
+                                        {{ form.comment.label_tag }}
+                                        <textarea name="{{ form.comment.html_name }}" class="form-control" rows="2"
+                                                  id="{{ form.comment.id_for_label }}">{% if form.comment.value %}
+                                            {{ form.comment.value }}{% endif %}</textarea>
+                                        {% for error in form.comment.errors %}
+                                            <p class="text-danger m-0">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end pb-3">
+                                    <a class="btn btn-outline-secondary" href="{% url 'main_page' %}"
+                                       role="button">{% trans "Cancel" %}</a>
+                                    <button class="btn btn-dark" type="submit">{% trans "Confirm order" %}</button>
+                                </div>
+                            </form>
+                        {% else %}
+                            <h5 class="page-title text-muted mb-2">Your cart is empty :(</h5>
+                            <form method="get" action="{% url 'main_page' %}">
+                                <button class="btn btn-dark" type="submit">Back to main page</button>
+                            </form>
+
+                        {% endif %}
+
+                    </div> <!-- end card-body-->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+    </div>
+
+{% endblock %}

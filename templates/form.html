@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+
+    <div class="container">
+        <!-- Flash messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} text-center"
+                     role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row mb-1 justify-content-center">
+            <div class="col-sm">
+                <div class="card p-3 shadow rounded-3">
+                    <div class="card-body pb-0">
+                        <h5 class="page-title text-muted mb-2">{% block form_title %}{% endblock %}</h5>
+
+                        <form method="post" action="{% block form_action %}{% endblock %}">
+                            {% csrf_token %}
+
+                            {% block form_body %}{% endblock %}
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end pb-3">
+                                <a class="btn btn-outline-secondary"
+                                   href="{% block cancel_redirect_url %}{% endblock %}"
+                                   role="button">{% block cancel_button_text %}{% endblock %}</a>
+                                <button class="btn btn-dark" type="submit">
+                                    {% block submit_button_text %}{% endblock %}</button>
+                            </div>
+                        </form>
+
+                    </div> <!-- end card-body-->
+                </div> <!-- end card -->
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+    </div>
+
+{% endblock %}

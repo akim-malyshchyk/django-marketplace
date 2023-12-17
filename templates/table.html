@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Best shop{% endblock %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container">
+        <!-- Flash messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} text-center"
+                     role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row mb-2">
+            <!-- Page title -->
+            <div class="col-2"></div>
+            <div class="col-8">
+                <h5 class="page-title text-muted mb-4">{% block form_title %}{% endblock %}</h5>
+                <div class="d-flex flex-row bd-highlight"></div>
+            </div><!-- end page title -->
+            <div class="col-2"></div>
+        </div>
+
+        <div class="row mb-1">
+            <div class="col-2"></div>
+            <div class="col-8">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        {% block table_header %}{% endblock %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% block table_body %}{% endblock %}
+                    </tbody>
+                </table>
+
+            </div> <!-- end col -->
+            <div class="col-2"></div>
+        </div> <!-- end row -->
+    </div>
+
+{% endblock %}
