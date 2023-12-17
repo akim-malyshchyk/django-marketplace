@@ -1,8 +1,17 @@
 # Online marketplace
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Django CI](https://github.com/akim-malyshchyk/django-marketplace/actions/workflows/django.yml/badge.svg)](https://github.com/akim-malyshchyk/django-marketplace/actions/workflows/django.yml)
+
 The project is an online store website with the ability to place orders and save the results in a database.
 The project was implemented using the Django framework.
 
 ## Tech stack
+![](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white)
+![](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+
 Python 3.8 and Django 3.2 were used as a basis. PostgreSQL was chosen as the database.
 Bootstrap and django templates were used to render frontend. Project version control was carried out using Git.
 
